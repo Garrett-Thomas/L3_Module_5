@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
@@ -16,8 +17,10 @@ import javax.swing.JPanel;
 
 public class Hangman implements KeyListener {
 	Stack<String> words = new Stack<String>();
+	ArrayList<JLabel> boxes = new ArrayList<JLabel>();
 	Random rand = new Random();
 	int lines = 0;
+	int lives = 0;
 	String currentWord = "";
 	JFrame frame = new JFrame();
 	JPanel panel = new JPanel();
@@ -27,7 +30,6 @@ public class Hangman implements KeyListener {
 		Hangman daddy = new Hangman();
 		daddy.anOriginalMethodName();
 		daddy.words();
-		daddy.checkWord();
 	}
 
 	public void anOriginalMethodName() {
@@ -50,7 +52,7 @@ public class Hangman implements KeyListener {
 			lnr.close();
 			BufferedReader br = new BufferedReader(new FileReader(new File("/usr/share/dict/words")));
 			for (int i = 0; i < lines; i++) {
-				words.add(br.readLine()); // adds every line to the array
+				words.add(br.readLine().toLowerCase()); // adds every line to the array
 			}
 			br.close();
 		} catch (IOException e) {
@@ -60,13 +62,31 @@ public class Hangman implements KeyListener {
 
 	public void checkWord() {
 		panel.removeAll();
-		for (int i = 0; i < currentWord.length(); i++) {
-			System.out.println(2);
-			JLabel labellete = new JLabel("_");
-			panel.add(labellete);
+		boxes.clear();
+		for (int i = 0; i < currentWord.length() + 1; i++) {
+			boxes.add( new JLabel("_"));
+			System.out.println(1);
+			panel.add(boxes.get(i));
 			panel.updateUI();
 		}
+		System.out.println(1);
+		int lives = boxes.size() - 1; 
 	}
+	private void updateSpacesWithUserInput(char keyChar) {
+		for (int i = 0; i < currentWord.length(); i++) {
+			if (currentWord.charAt(i) == keyChar) {
+				boxes.get(i).setText("" + keyChar);
+			}
+		}
+			else {
+				System.out.println(2);
+				lives--;
+				boxes.get(boxes.size()-1).setText("" + lives);
+				
+			
+		}
+	}
+
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -78,20 +98,16 @@ public class Hangman implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-			checkWord();
-			System.out.println(1);
 			int randNum = rand.nextInt(lines);
+			label.setText(words.get(randNum));
 			currentWord = words.get(randNum);
+			checkWord();
 			words.remove(randNum);
 			lines--;
+			
+		} 
+		updateSpacesWithUserInput(e.getKeyChar());
 		}
-		if(currentWord.contains(e.getKeyChar() + "")) {
-			currentWord.toCharArray();
-			for (int i = 0; i < currentWord.length(); i++) {
-				currentWord.
-			}
-		}
-	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
