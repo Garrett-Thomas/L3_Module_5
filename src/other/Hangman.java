@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,7 +23,7 @@ public class Hangman implements KeyListener {
 	ArrayList<JLabel> boxes = new ArrayList<JLabel>();
 	Random rand = new Random();
 	int lines = 0;
-	int lives = 0;
+	int lives = 9;
 	String currentWord = "";
 	JFrame frame = new JFrame();
 	JPanel panel = new JPanel();
@@ -30,6 +33,7 @@ public class Hangman implements KeyListener {
 		Hangman daddy = new Hangman();
 		daddy.anOriginalMethodName();
 		daddy.words();
+		daddy.checkWord();
 	}
 
 	public void anOriginalMethodName() {
@@ -69,22 +73,22 @@ public class Hangman implements KeyListener {
 			panel.add(boxes.get(i));
 			panel.updateUI();
 		}
-		System.out.println(1);
-		int lives = boxes.size() - 1; 
 	}
 	private void updateSpacesWithUserInput(char keyChar) {
 		for (int i = 0; i < currentWord.length(); i++) {
 			if (currentWord.charAt(i) == keyChar) {
 				boxes.get(i).setText("" + keyChar);
+				break;
 			}
-		}
-			else {
-				System.out.println(2);
+			if(i == currentWord.length() - 1 ) {
 				lives--;
-				boxes.get(boxes.size()-1).setText("" + lives);
 				
-			
+			}
+			System.out.println(i);
+			boxes.get(boxes.size()-1).setText("" + lives);
 		}
+	
+		
 	}
 
 
@@ -97,6 +101,18 @@ public class Hangman implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
+		if(lives == 0) {
+			try {
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("/Users/League/Desktop/stupid.wav"));
+				Clip clip = AudioSystem.getClip();
+				clip.open(audioInputStream);
+				clip.start();
+				Thread.sleep(8400);
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			System.exit(1);
+		}
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			int randNum = rand.nextInt(lines);
 			label.setText(words.get(randNum));
