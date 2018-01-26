@@ -35,7 +35,6 @@ public class IPodShuffle implements ActionListener {
 		shuf.anOriginalMethodName();
 	}
 	public void anOriginalMethodName() {
-		frame = new JFrame();
 		panel = new JPanel();
 		button = new JButton();
 		frame.add(panel);
@@ -43,6 +42,7 @@ public class IPodShuffle implements ActionListener {
 		button.setText("Play Random Song");
 		frame.setVisible(true);
 		button.addActionListener(this);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 	}
 	/**
@@ -58,7 +58,12 @@ public class IPodShuffle implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getSource() == button) {
+			for (int i = 0; i < Songs.size(); i++) {
+				Songs.get(i).stop();
+				System.out.println(i);
+			}
 			Songs.get(rand.nextInt(Songs.size())).play();
+			System.out.println("asd");
 		}
 	}
 }
