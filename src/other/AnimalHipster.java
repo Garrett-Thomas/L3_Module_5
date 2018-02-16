@@ -5,14 +5,21 @@ import java.util.HashMap;
 
 public class AnimalHipster {
 	public ArrayList<String> findAnimalHipsters(HashMap<String, ArrayList<String>> network, HashMap<String, String> favoriteAnimals){
-		for (int i = 0; i < network.size(); i++) {
-			for (int j = 0; j < favoriteAnimals.size(); j++) {
-				if(network.getKey())
-			}
+		 ArrayList<String> result = new ArrayList<String>();
+		 for (String person: network.keySet()) {
+			 boolean isHip = true;
+			 for(String friend: network.get(person)) {
+				 if(favoriteAnimals.get(friend).equals((favoriteAnimals.get(person)))) {
+					 isHip = false;
+				 }
+		 }
+			 if(isHip) {
+				 result.add(person);
+			 }
 			
 		}
 		
-		return null;
+		return result;
 		
 	}
 }
